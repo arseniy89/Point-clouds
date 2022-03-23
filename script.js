@@ -17,24 +17,24 @@ function getMouseCoords(elem, data) {
 
 
 // ОБНОВЛЯЕМ
-function Setup(ctx, grid, cloud) {
+function Setup(ctx, grid, cl) {
     let val = 2.5
     let radius = 5
     canvas.onclick = (data) => {
         const [x, y] = getMouseCoords(canvas, data)
         grid.applyInfluence(x, y, grid.cellSide * radius)
-        cloud.push({x, y})
-        Draw(ctx, grid, cloud, val)
+        cl.push({x, y})
+        Draw(ctx, grid, cl, val)
     }
     const l_slider = document.getElementById('lim')
     const l_val = document.getElementById('lim_val')
     l_slider.value = val
-    l_val.innerHTML = `${l_val.value}`
-    val = parseFloat(l_val.value)
+    l_val.innerHTML = `${l_slider.value}`
+    val = parseFloat(l_slider.value)
     l_slider.onchange = () => {
         l_val.innerHTML = `${l_slider.value}`
         val = parseFloat(l_slider.value)
-        Draw(ctx, grid, cloud, val)
+        Draw(ctx, grid, cl, val)
     }
     const r_slider = document.getElementById('radius')
     const r_val = document.getElementById('rad_val')
@@ -44,16 +44,16 @@ function Setup(ctx, grid, cloud) {
     r_slider.onchange = () => {
         r_val.innerHTML = `${r_slider.value}`
         radius = parseFloat(r_slider.value)
-        Draw(ctx, grid, cloud, val, radius)
+        Draw(ctx, grid, cl, val, radius)
     }
 }
 
 
 // РИСУЕМ
-function Draw(ctx, grid, cloud, val, radius) {
+function Draw(ctx, grid, cl, val, radius) {
     if (radius !== undefined) {
         grid.clearGrid()
-        for (const point of cloud) {
+        for (const point of cl) {
             grid.applyInfluence(point.x, point.y, grid.cellSide*radius)
         }
     }
@@ -69,7 +69,7 @@ function Draw(ctx, grid, cloud, val, radius) {
         }
     }
     ctx.fillStyle = 'white'
-    for (const point of cloud) {ctx.fillRect(point.x-3, point.y-3, 7, 7)}
+    for (const point of cl) {ctx.fillRect(point.x-3, point.y-3, 7, 7)}
 
     const segments = []
     for (let numX = 0; numX < grid.ncols - 1; numX++) {
